@@ -7,14 +7,8 @@ function App() {
     username: 'Kevin',
   }) : JSON.parse(document.getElementById('data').text);
   const [ratings, updateRatings] = useState(args.ratings_ids);
-  const form = useRef(null);
 
-  function onClickAdd() {
-    const val = form.current.value;
-    const updatedArtists = [...ratings, val];
-    updateRatings(updatedArtists);
-    form.current.value = '';
-  }
+
 
   function onClickDelete(i) {
     const updatedArtists = [...ratings.slice(0, i), ...ratings.slice(i + 1)];
@@ -40,11 +34,11 @@ function App() {
   const delButton = {
     backgroundColor: 'red',
     display: 'inline-block',
-    fontSize: '16px',
+    fontSize: '15px',
     color: 'white',
-    padding: '16px 32px',
     textAlign: 'center',
-    textDecoration: 'none',
+    align: 'center',
+    border: 'none',
   };
 
 
@@ -52,9 +46,9 @@ function App() {
   const gridStyle = {
     align: 'center',
     display: 'grid',
-    marginLeft: '25%',
-    marginRight: '25%',
-    gridTemplateColumns: '2fr 1fr',
+    marginLeft: '30%',
+    marginRight: '30%',
+    gridTemplateColumns: '1fr 1fr',
     gridGap: '10px 5px',
   };
 
