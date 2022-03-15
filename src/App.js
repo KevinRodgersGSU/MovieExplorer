@@ -11,9 +11,9 @@ function App() {
 
 
   function onClickDelete(i) {
-    const updatedArtists = [...ratings.slice(0, i), ...ratings.slice(i + 1)];
-    console.log(updatedArtists)
-    updateRatings(updatedArtists);
+    const updatedRatings = [...ratings.slice(0, i), ...ratings.slice(i + 1)];
+    console.log(updatedRatings)
+    updateRatings(updatedRatings);
   }
 
   function onClickSave() {
