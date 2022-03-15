@@ -56,8 +56,6 @@ bp = flask.Blueprint(
 )
 MOVIE_IDS = [
     634649,
-    157336,
-    923632,
 ]
 
 # route for serving React page
@@ -70,6 +68,8 @@ def index():
     wiki_url = get_wiki_link(title)
     ratings = Rating.query.filter_by(movie_id=movie_id).all()
     ratings_ids = [t.id for t in ratings]
+    userRatings = Rating.query.filter_by(username=current_user.username).all()
+    userRatings_ids = [t.comment for t in userRatings]
     data = json.dumps(
         {
             "username": current_user.username,
@@ -81,7 +81,6 @@ def index():
             "poster_image": poster_image,
         }
     )
-    print(data)
     return flask.render_template("index.html", data=data)
 
 
@@ -141,6 +140,27 @@ def rate():
     db.session.add(new_rating)
     db.session.commit()
     return flask.redirect(flask.url_for("bp.index"))
+
+
+@app.route("/save", methods=["POST"])
+def save():
+    ratings_ids = flask.request.json.get("ratings_ids")
+    username = current_user.username
+    update_db_ids_for_user(username, ratings_ids)
+    response = {"ratings_ids": [a for a in ratings_ids]}
+    return flask.jsonify(response)
+
+
+def update_db_ids_for_user(username, artist_ids):
+    artist_ids = set(artist_ids)
+    existing_ids = {v.id for v in Rating.query.filter_by(username=username).all()}
+    if len(existing_ids - artist_ids) > 0:
+        for artist in Rating.query.filter_by(username=username).filter(
+            Rating.id.notin_(artist_ids)
+        ):
+            print(repr(artist))
+            # db.session.delete(artist)
+    # db.session.commit()
 
 
 @app.route("/")

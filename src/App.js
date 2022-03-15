@@ -18,12 +18,13 @@ function App() {
 
   function onClickDelete(i) {
     const updatedArtists = [...ratings.slice(0, i), ...ratings.slice(i + 1)];
+    console.log(updatedArtists)
     updateRatings(updatedArtists);
   }
 
   function onClickSave() {
     const requestData = { ratings_ids: ratings };
-    fetch('/rate', {
+    fetch('/save', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -58,9 +59,9 @@ function App() {
     marginRight: '30%',
   };
 
-  const artistsList = ratings.map((artistID, i) => (
+  const artistsList = ratings.map((ratingID, i) => (
     <div style={gridStyle}>
-      <p>{artistID}</p>
+      <p>{ratingID}</p>
       <button type="button" style={deleteButtonStyle} onClick={() => onClickDelete(i)}>Delete</button>
     </div>
   ));
@@ -94,6 +95,7 @@ function App() {
         </form>
       </div>
       {artistsList}
+      <button type="button" onClick={onClickSave}>Save</button>
     </body>
   );
 }
