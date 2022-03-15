@@ -37,6 +37,9 @@ class Rating(db.Model):
     username = db.Column(db.String(80))
     movie_id = db.Column(db.Integer)
 
+    def as_dict(self):
+        return {c.rating: getattr(self, c.rating) for c in self.__table__.columns}
+
 
 db.create_all()
 login_manager = LoginManager()
@@ -66,10 +69,11 @@ def index():
     # API calls
     (title, tagline, genre, poster_image) = get_movie_data(movie_id)
     wiki_url = get_wiki_link(title)
-    ratings = Rating.query.filter_by(movie_id=movie_id).all()
-    ratings_ids = [t.id for t in ratings]
     userRatings = Rating.query.filter_by(username=current_user.username).all()
-    userRatings_ids = [t.comment for t in userRatings]
+    ratings_ids = [t.id for t in userRatings]
+    comments = [t.comment for t in userRatings]
+    ratings = [t.rating for t in userRatings]
+    movieids = [t.movie_id for t in userRatings]
     data = json.dumps(
         {
             "username": current_user.username,
@@ -79,6 +83,9 @@ def index():
             "ratings_ids": ratings_ids,
             "movie_id": movie_id,
             "poster_image": poster_image,
+            "comments": comments,
+            "ratings": ratings,
+            "movieids": movieids,
         }
     )
     return flask.render_template("index.html", data=data)
@@ -151,16 +158,15 @@ def save():
     return flask.jsonify(response)
 
 
-def update_db_ids_for_user(username, artist_ids):
-    artist_ids = set(artist_ids)
+def update_db_ids_for_user(username, ratings_ids):
+    ratings_ids = set(ratings_ids)
     existing_ids = {v.id for v in Rating.query.filter_by(username=username).all()}
-    if len(existing_ids - artist_ids) > 0:
+    if len(existing_ids - ratings_ids) > 0:
         for artist in Rating.query.filter_by(username=username).filter(
-            Rating.id.notin_(artist_ids)
+            Rating.id.notin_(ratings_ids)
         ):
-            print(repr(artist))
-            # db.session.delete(artist)
-    # db.session.commit()
+            db.session.delete(artist)
+    db.session.commit()
 
 
 @app.route("/")

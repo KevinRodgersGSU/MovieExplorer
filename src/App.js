@@ -37,15 +37,14 @@ function App() {
       });
   }
 
-  const deleteButtonStyle = {
+  const delButton = {
     backgroundColor: 'red',
-    border: 'none',
-    color: 'white',
-    padding: '15px 32px',
-    textAlign: 'center',
-    textDecoration: 'none',
     display: 'inline-block',
     fontSize: '16px',
+    color: 'white',
+    padding: '16px 32px',
+    textAlign: 'center',
+    textDecoration: 'none',
   };
 
 
@@ -53,16 +52,19 @@ function App() {
   const gridStyle = {
     align: 'center',
     display: 'grid',
+    marginLeft: '25%',
+    marginRight: '25%',
     gridTemplateColumns: '2fr 1fr',
     gridGap: '10px 5px',
-    marginLeft: '30%',
-    marginRight: '30%',
   };
 
-  const artistsList = ratings.map((ratingID, i) => (
+  const ratingsList = ratings.map((ratingID, i) => (
     <div style={gridStyle}>
-      <p>{ratingID}</p>
-      <button type="button" style={deleteButtonStyle} onClick={() => onClickDelete(i)}>Delete</button>
+      <p>Username:{args.username}</p>
+      <p>Rating:{args.ratings[i]}</p>
+      <p>Comments:{args.comments[i]}</p>
+      <p>Movie ID:{args.movieids[i]}</p>
+      <button type="button" style={delButton} onClick={() => onClickDelete(i)}>Delete</button>
     </div>
   ));
 
@@ -77,7 +79,6 @@ function App() {
         <img src={args.poster_image} />
       </div>
       <a href={args.wiki_url}> Click here to see Wikipedia page! </a>
-
       <div class="feedback">
         <form method="POST" action="/rate">
           <p>
@@ -94,7 +95,8 @@ function App() {
           </p>
         </form>
       </div>
-      {artistsList}
+      <h1>Your Reviews:</h1>
+      {ratingsList}
       <button type="button" onClick={onClickSave}>Save</button>
     </body>
   );
