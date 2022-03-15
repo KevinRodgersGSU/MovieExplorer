@@ -162,10 +162,10 @@ def update_db_ids_for_user(username, ratings_ids):
     ratings_ids = set(ratings_ids)
     existing_ids = {v.id for v in Rating.query.filter_by(username=username).all()}
     if len(existing_ids - ratings_ids) > 0:
-        for artist in Rating.query.filter_by(username=username).filter(
+        for rating in Rating.query.filter_by(username=username).filter(
             Rating.id.notin_(ratings_ids)
         ):
-            db.session.delete(artist)
+            db.session.delete(rating)
     db.session.commit()
 
 
