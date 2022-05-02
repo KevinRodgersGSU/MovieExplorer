@@ -70,10 +70,11 @@ def index():
     (title, tagline, genre, poster_image) = get_movie_data(movie_id)
     wiki_url = get_wiki_link(title)
     userRatings = Rating.query.filter_by(username=current_user.username).all()
-    ratings_ids = [t.id for t in userRatings]
-    comments = [t.comment for t in userRatings]
-    ratings = [t.rating for t in userRatings]
-    movieids = [t.movie_id for t in userRatings]
+    for t in userRatings:
+        ratings_ids += t.id
+        comments += t.comment
+        ratings += t.rating
+        movieids += t.movie_id
     data = json.dumps(
         {
             "username": current_user.username,
