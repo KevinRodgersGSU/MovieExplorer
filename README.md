@@ -1,3 +1,14 @@
+# Movie Explorer
+[Heroku Link](http://tranquil-shore-46851.herokuapp.com)
+
+This full stack web application allows users to find new movies and create accounts to be able to make a list of their favorite movies and leave comments/ratings for movies they have already seen that will get shown to other users.
+
+Tools used: Javascript(React), Python(Flask), HTML5, CSS, SQLAlchemy
+
+<img width="312" alt="react" src="https://user-images.githubusercontent.com/77468658/192361787-9f49734a-be57-4abc-9934-f62a04794040.PNG">
+
+
+
 ## Setup Instructions
 1. `pip3 install -r requirements.txt`
 2. Create a `.env` file in the top-level directory and enter the following as its contents:
